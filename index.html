@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đi xem phim nhé! 🎬</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.5; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: containerPulse 4s infinite ease-in-out;
+        }
+
+        @keyframes containerPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+            50% { transform: scale(1.02); box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: textGlow 3s infinite ease-in-out;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { color: #333; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
+            50% { color: #667eea; text-shadow: 2px 2px 10px rgba(102, 126, 234, 0.5); }
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin: 20px 0;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .button-container {
+            margin-top: 40px;
+            position: relative;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+            color: white;
+            box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(86, 171, 47, 0.6);
+        }
+
+        .btn-no {
+            background: linear-gradient(45deg, #ff6b6b, #ffa8a8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Heart animation */
+        .heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 20px;
+            animation: heartFloat 3s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(0px) scale(1); opacity: 0; }
+            50% { transform: translateY(-30px) scale(1.2); opacity: 1; }
+            100% { transform: translateY(-60px) scale(1); opacity: 0; }
+        }
+
+        /* Success modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            animation: modalPop 0.5s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal h2 {
+            color: #56ab2f;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .modal p {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .celebration {
+            font-size: 3em;
+            animation: spin 2s infinite linear;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                height: auto;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles -->
+    <div class="particles"></div>
+
+    <div class="container">
+        <h1>Đi xem phim với mình nhé?</h1>
+        <div class="emoji">🎬❤️</div>
+        
+        <div class="button-container">
+            <button class="btn btn-yes" onclick="handleYes()">
+                Đồng ý 💕
+            </button>
+            <button class="btn btn-no" id="noBtn" onmouseenter="moveButton()">
+                Không đồng ý 😢
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="celebration">🎉</div>
+            <h2>Yayyy! 🥳</h2>
+            <p>Mình biết mà! Bạn không thể từ chối mình được đâu! 😘</p>
+            <p>Chúng ta sẽ có một buổi xem phim tuyệt vời! 🍿🎬</p>
+            <button class="btn btn-yes" onclick="closeModal()" style="margin-top: 20px;">
+                Đóng ❤️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Move the "No" button to random position
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+            
+            // Create hearts effect
+            createHearts();
+            
+            // Calculate random position within container bounds
+            const maxX = containerRect.width - noBtn.offsetWidth - 40;
+            const maxY = containerRect.height - noBtn.offsetHeight - 40;
+            
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+            noBtn.style.transition = 'all 0.3s ease';
+            
+            // Add wiggle animation
+            noBtn.style.animation = 'wiggle 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                noBtn.style.animation = '';
+            }, 500);
+        }
+
+        // Create floating hearts
+        function createHearts() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = i * 0.2 + 's';
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }
+        }
+
+        // Handle "Yes" button click
+        function handleYes() {
+            // Create celebration effect
+            createCelebration();
+            
+            // Show success modal
+            setTimeout(() => {
+                document.getElementById('successModal').style.display = 'flex';
+            }, 1000);
+        }
+
+        // Create celebration animation
+        function createCelebration() {
+            const container = document.querySelector('.container');
+            const emojis = ['🎉', '💕', '🥳', '🎊', '💖', '🌟', '✨'];
+            
+            for (let i = 0; i < 20; i++) {
+                const emoji = document.createElement('div');
+                emoji.style.position = 'absolute';
+                emoji.style.fontSize = '30px';
+                emoji.style.left = Math.random() * 100 + '%';
+                emoji.style.top = Math.random() * 100 + '%';
+                emoji.style.animation = 'heartFloat 2s ease-out forwards';
+                emoji.style.animationDelay = i * 0.1 + 's';
+                emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.pointerEvents = 'none';
+                container.appendChild(emoji);
+                
+                setTimeout(() => {
+                    emoji.remove();
+                }, 2000);
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // Add wiggle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes wiggle {
+                0% { transform: rotate(0deg); }
+                25% { transform: rotate(5deg); }
+                50% { transform: rotate(-5deg); }
+                75% { transform: rotate(5deg); }
+                100% { transform: rotate(0deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Add click sound effect (optional - you can add audio files)
+            document.addEventListener('click', function() {
+                // Add subtle click feedback
+                document.body.style.animation = 'none';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 10);
+            });
+        });
+
+        // Prevent context menu on no button
+        document.getElementById('noBtn').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Easter egg: Multiple rapid hovers make the button disappear temporarily
+        let hoverCount = 0;
+        let hoverTimeout;
+
+        document.getElementById('noBtn').addEventListener('mouseenter', function() {
+            hoverCount++;
+            clearTimeout(hoverTimeout);
+            
+            if (hoverCount >= 10) {
+                this.style.opacity = '0';
+                this.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    this.style.opacity = '1';
+                    this.style.pointerEvents = 'auto';
+                    hoverCount = 0;
+                }, 2000);
+            }
+            
+            hoverTimeout = setTimeout(() => {
+                hoverCount = 0;
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 
